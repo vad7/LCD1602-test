@@ -49,6 +49,8 @@ Discarded input sections
                 0x00000000       0x12 LCDTest.o
  .text.Delay1ms
                 0x00000000       0x18 LCDTest.o
+ .text.Delay100ms
+                0x00000000       0x1e LCDTest.o
  .bss.KeysPressedTimeOut
                 0x00000000        0x1 LCDTest.o
  .bss.KeysPressed
@@ -272,7 +274,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x4d6
+.text           0x00000000      0x4a2
  *(.vectors)
  .vectors       0x00000000       0x22 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/crttn44a.o
                 0x00000000                __vector_default
@@ -417,26 +419,23 @@ END GROUP
  .text.FormatNumberHEX
                 0x0000031a       0x28 LCDTest.o
                 0x0000031a                FormatNumberHEX
- .text.Delay100ms
-                0x00000342       0x1e LCDTest.o
-                0x00000342                Delay100ms
  .text.EEPROM_read
-                0x00000360        0xe LCDTest.o
-                0x00000360                EEPROM_read
+                0x00000342        0xe LCDTest.o
+                0x00000342                EEPROM_read
  .text.EEPROM_write
-                0x0000036e       0x16 LCDTest.o
-                0x0000036e                EEPROM_write
+                0x00000350       0x16 LCDTest.o
+                0x00000350                EEPROM_write
  .text.__vector_6
-                0x00000384       0x3e LCDTest.o
-                0x00000384                __vector_6
+                0x00000366       0x3e LCDTest.o
+                0x00000366                __vector_6
  .text.startup.main
-                0x000003c2      0x110 LCDTest.o
-                0x000003c2                main
-                0x000004d2                . = ALIGN (0x2)
+                0x000003a4       0xfa LCDTest.o
+                0x000003a4                main
+                0x0000049e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000004d2        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25\libgcc.a(_exit.o)
-                0x000004d2                _exit
-                0x000004d2                exit
+ .fini9         0x0000049e        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25\libgcc.a(_exit.o)
+                0x0000049e                _exit
+                0x0000049e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -455,11 +454,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000004d2        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25\libgcc.a(_exit.o)
+ .fini0         0x0000049e        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25\libgcc.a(_exit.o)
  *(.fini0)
-                0x000004d6                _etext = .
+                0x000004a2                _etext = .
 
-.data           0x00800060        0x2 load address 0x000004d6
+.data           0x00800060        0x2 load address 0x000004a2
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -489,8 +488,8 @@ END GROUP
  COMMON         0x00800065       0x11 LCDTest.o
                 0x00800065                buffer
                 0x00800076                PROVIDE (__bss_end, .)
-                0x000004d6                __data_load_start = LOADADDR (.data)
-                0x000004d8                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000004a2                __data_load_start = LOADADDR (.data)
+                0x000004a4                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800076        0x0
                 0x00800076                PROVIDE (__noinit_start, .)
@@ -564,30 +563,30 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1515
+.debug_info     0x00000000     0x14e4
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000     0x1515 LCDTest.o
+ .debug_info    0x00000000     0x14e4 LCDTest.o
 
 .debug_abbrev   0x00000000      0x377
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x377 LCDTest.o
 
-.debug_line     0x00000000      0x6c0
+.debug_line     0x00000000      0x6b7
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000      0x6c0 LCDTest.o
+ .debug_line    0x00000000      0x6b7 LCDTest.o
 
 .debug_frame    0x00000000      0x3a0
  *(.debug_frame)
  .debug_frame   0x00000000      0x3a0 LCDTest.o
 
-.debug_str      0x00000000      0x43c
+.debug_str      0x00000000      0x434
  *(.debug_str)
- .debug_str     0x00000000      0x43c LCDTest.o
-                                0x493 (size before relaxing)
+ .debug_str     0x00000000      0x434 LCDTest.o
+                                0x48b (size before relaxing)
 
-.debug_loc      0x00000000     0x1354
+.debug_loc      0x00000000     0x133b
  *(.debug_loc)
- .debug_loc     0x00000000     0x1354 LCDTest.o
+ .debug_loc     0x00000000     0x133b LCDTest.o
 
 .debug_macinfo
  *(.debug_macinfo)

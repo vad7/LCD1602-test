@@ -3,29 +3,29 @@ LCDTest.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000004d6  00000000  00000000  00000094  2**1
+  0 .text         000004a2  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000002  00800060  000004d6  0000056a  2**0
+  1 .data         00000002  00800060  000004a2  00000536  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000014  00800062  00800062  0000056c  2**0
+  2 .bss          00000014  00800062  00800062  00000538  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000056c  2**0
+  3 .comment      00000030  00000000  00000000  00000538  2**0
                   CONTENTS, READONLY
-  4 .debug_aranges 00000128  00000000  00000000  0000059c  2**0
+  4 .debug_aranges 00000128  00000000  00000000  00000568  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00001515  00000000  00000000  000006c4  2**0
+  5 .debug_info   000014e4  00000000  00000000  00000690  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000377  00000000  00000000  00001bd9  2**0
+  6 .debug_abbrev 00000377  00000000  00000000  00001b74  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000006c0  00000000  00000000  00001f50  2**0
+  7 .debug_line   000006b7  00000000  00000000  00001eeb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000003a0  00000000  00000000  00002610  2**2
+  8 .debug_frame  000003a0  00000000  00000000  000025a4  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000043c  00000000  00000000  000029b0  2**0
+  9 .debug_str    00000434  00000000  00000000  00002944  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00001354  00000000  00000000  00002dec  2**0
+ 10 .debug_loc    0000133b  00000000  00000000  00002d78  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000148  00000000  00000000  00004140  2**0
+ 11 .debug_ranges 00000148  00000000  00000000  000040b3  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -37,7 +37,7 @@ Disassembly of section .text:
    6:	59 c0       	rjmp	.+178    	; 0xba <__bad_interrupt>
    8:	58 c0       	rjmp	.+176    	; 0xba <__bad_interrupt>
    a:	57 c0       	rjmp	.+174    	; 0xba <__bad_interrupt>
-   c:	bb c1       	rjmp	.+886    	; 0x384 <__vector_6>
+   c:	ac c1       	rjmp	.+856    	; 0x366 <__vector_6>
    e:	55 c0       	rjmp	.+170    	; 0xba <__bad_interrupt>
   10:	54 c0       	rjmp	.+168    	; 0xba <__bad_interrupt>
   12:	53 c0       	rjmp	.+166    	; 0xba <__bad_interrupt>
@@ -95,7 +95,7 @@ Disassembly of section .text:
   90:	10 e0       	ldi	r17, 0x00	; 0
   92:	a0 e6       	ldi	r26, 0x60	; 96
   94:	b0 e0       	ldi	r27, 0x00	; 0
-  96:	e6 ed       	ldi	r30, 0xD6	; 214
+  96:	e2 ea       	ldi	r30, 0xA2	; 162
   98:	f4 e0       	ldi	r31, 0x04	; 4
   9a:	02 c0       	rjmp	.+4      	; 0xa0 <__do_copy_data+0x10>
   9c:	05 90       	lpm	r0, Z+
@@ -117,8 +117,8 @@ Disassembly of section .text:
   b0:	a6 37       	cpi	r26, 0x76	; 118
   b2:	b2 07       	cpc	r27, r18
   b4:	e1 f7       	brne	.-8      	; 0xae <.do_clear_bss_loop>
-  b6:	85 d1       	rcall	.+778    	; 0x3c2 <main>
-  b8:	0c c2       	rjmp	.+1048   	; 0x4d2 <_exit>
+  b6:	76 d1       	rcall	.+748    	; 0x3a4 <main>
+  b8:	f2 c1       	rjmp	.+996    	; 0x49e <_exit>
 
 000000ba <__bad_interrupt>:
   ba:	a2 cf       	rjmp	.-188    	; 0x0 <__vectors>
@@ -777,383 +777,336 @@ void FormatNumberHEX(const uint8_t num) {
  33c:	10 92 67 00 	sts	0x0067, r1
  340:	08 95       	ret
 
-00000342 <Delay100ms>:
-	while(ms-- > 0) {
-		_delay_ms(1); wdt_reset();
+00000342 <EEPROM_read>:
 	}
 }
-void Delay100ms(unsigned int ms) {
-	while(ms-- > 0) {
- 342:	00 97       	sbiw	r24, 0x00	; 0
- 344:	61 f0       	breq	.+24     	; 0x35e <Delay100ms+0x1c>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 346:	2f ef       	ldi	r18, 0xFF	; 255
- 348:	30 e7       	ldi	r19, 0x70	; 112
- 34a:	42 e0       	ldi	r20, 0x02	; 2
- 34c:	21 50       	subi	r18, 0x01	; 1
- 34e:	30 40       	sbci	r19, 0x00	; 0
- 350:	40 40       	sbci	r20, 0x00	; 0
- 352:	e1 f7       	brne	.-8      	; 0x34c <Delay100ms+0xa>
- 354:	00 c0       	rjmp	.+0      	; 0x356 <Delay100ms+0x14>
- 356:	00 00       	nop
-		_delay_ms(100); wdt_reset();
- 358:	a8 95       	wdr
- 35a:	01 97       	sbiw	r24, 0x01	; 1
- 35c:	f2 cf       	rjmp	.-28     	; 0x342 <Delay100ms>
-	}
-}
- 35e:	08 95       	ret
-
-00000360 <EEPROM_read>:
 
 uint8_t EEPROM_read(uint16_t ucAddress) // ATtiny84A only!
 {
 	while(EECR & (1<<EEPE)) ; // EEWE
- 360:	e1 99       	sbic	0x1c, 1	; 28
- 362:	fe cf       	rjmp	.-4      	; 0x360 <EEPROM_read>
+ 342:	e1 99       	sbic	0x1c, 1	; 28
+ 344:	fe cf       	rjmp	.-4      	; 0x342 <EEPROM_read>
 	EEAR = ucAddress;
- 364:	9f bb       	out	0x1f, r25	; 31
- 366:	8e bb       	out	0x1e, r24	; 30
+ 346:	9f bb       	out	0x1f, r25	; 31
+ 348:	8e bb       	out	0x1e, r24	; 30
 	EECR |= (1<<EERE);
- 368:	e0 9a       	sbi	0x1c, 0	; 28
+ 34a:	e0 9a       	sbi	0x1c, 0	; 28
 	return EEDR;
- 36a:	8d b3       	in	r24, 0x1d	; 29
+ 34c:	8d b3       	in	r24, 0x1d	; 29
 }
- 36c:	08 95       	ret
+ 34e:	08 95       	ret
 
-0000036e <EEPROM_write>:
+00000350 <EEPROM_write>:
 void EEPROM_write(uint16_t ucAddress, uint8_t ucData) // ATtiny84A only!
 {
 	while(EECR & (1<<EEPE)) ; // EEWE
- 36e:	e1 99       	sbic	0x1c, 1	; 28
- 370:	fe cf       	rjmp	.-4      	; 0x36e <EEPROM_write>
+ 350:	e1 99       	sbic	0x1c, 1	; 28
+ 352:	fe cf       	rjmp	.-4      	; 0x350 <EEPROM_write>
 	cli();
- 372:	f8 94       	cli
+ 354:	f8 94       	cli
 	EECR = (0<<EEPM1)|(0<<EEPM0);
- 374:	1c ba       	out	0x1c, r1	; 28
+ 356:	1c ba       	out	0x1c, r1	; 28
 	EEAR = ucAddress;
- 376:	9f bb       	out	0x1f, r25	; 31
- 378:	8e bb       	out	0x1e, r24	; 30
+ 358:	9f bb       	out	0x1f, r25	; 31
+ 35a:	8e bb       	out	0x1e, r24	; 30
 	EEDR = ucData;
- 37a:	6d bb       	out	0x1d, r22	; 29
+ 35c:	6d bb       	out	0x1d, r22	; 29
 	EECR |= (1<<EEMPE); //(1<<EEMWE);
- 37c:	e2 9a       	sbi	0x1c, 2	; 28
+ 35e:	e2 9a       	sbi	0x1c, 2	; 28
 	EECR |= (1<<EEPE); //(1<<EEWE);
- 37e:	e1 9a       	sbi	0x1c, 1	; 28
+ 360:	e1 9a       	sbi	0x1c, 1	; 28
 	sei();
- 380:	78 94       	sei
- 382:	08 95       	ret
+ 362:	78 94       	sei
+ 364:	08 95       	ret
 
-00000384 <__vector_6>:
+00000366 <__vector_6>:
 }
 
 #define SETUP_WATCHDOG WDTCSR = (1<<WDCE) | (1<<WDE); WDTCSR = (1<<WDE) | (1<<WDIE) | (0<<WDP3) | (1<<WDP2) | (1<<WDP1) | (0<<WDP0) //  Watchdog 1 s
 ISR(TIM1_COMPA_vect, ISR_NOBLOCK) { // 0.125s
- 384:	78 94       	sei
- 386:	1f 92       	push	r1
- 388:	0f 92       	push	r0
- 38a:	0f b6       	in	r0, 0x3f	; 63
- 38c:	0f 92       	push	r0
- 38e:	11 24       	eor	r1, r1
- 390:	8f 93       	push	r24
+ 366:	78 94       	sei
+ 368:	1f 92       	push	r1
+ 36a:	0f 92       	push	r0
+ 36c:	0f b6       	in	r0, 0x3f	; 63
+ 36e:	0f 92       	push	r0
+ 370:	11 24       	eor	r1, r1
+ 372:	8f 93       	push	r24
 	if(++sec_cnt == 8) {
- 392:	80 91 62 00 	lds	r24, 0x0062
- 396:	8f 5f       	subi	r24, 0xFF	; 255
- 398:	80 93 62 00 	sts	0x0062, r24
- 39c:	88 30       	cpi	r24, 0x08	; 8
- 39e:	59 f4       	brne	.+22     	; 0x3b6 <__vector_6+0x32>
+ 374:	80 91 62 00 	lds	r24, 0x0062
+ 378:	8f 5f       	subi	r24, 0xFF	; 255
+ 37a:	80 93 62 00 	sts	0x0062, r24
+ 37e:	88 30       	cpi	r24, 0x08	; 8
+ 380:	59 f4       	brne	.+22     	; 0x398 <__vector_6+0x32>
 		sec_cnt = 0;
- 3a0:	10 92 62 00 	sts	0x0062, r1
+ 382:	10 92 62 00 	sts	0x0062, r1
 		if(Timer) Timer--;
- 3a4:	80 91 63 00 	lds	r24, 0x0063
- 3a8:	88 23       	and	r24, r24
- 3aa:	29 f0       	breq	.+10     	; 0x3b6 <__vector_6+0x32>
- 3ac:	80 91 63 00 	lds	r24, 0x0063
- 3b0:	81 50       	subi	r24, 0x01	; 1
- 3b2:	80 93 63 00 	sts	0x0063, r24
+ 386:	80 91 63 00 	lds	r24, 0x0063
+ 38a:	88 23       	and	r24, r24
+ 38c:	29 f0       	breq	.+10     	; 0x398 <__vector_6+0x32>
+ 38e:	80 91 63 00 	lds	r24, 0x0063
+ 392:	81 50       	subi	r24, 0x01	; 1
+ 394:	80 93 63 00 	sts	0x0063, r24
 	}
 	//if(DisplayRefresh > 1) DisplayRefresh--;
 	//if(KeysPressedTimeOut && --KeysPressedTimeOut == 0) {
 	//	KeysPressed = (KEY_IN & (KEY_LEFT | KEY_RIGHT | KEY_OK)) ^ (KEY_LEFT | KEY_RIGHT | KEY_OK);
 	//}
 }
- 3b6:	8f 91       	pop	r24
- 3b8:	0f 90       	pop	r0
- 3ba:	0f be       	out	0x3f, r0	; 63
- 3bc:	0f 90       	pop	r0
- 3be:	1f 90       	pop	r1
- 3c0:	18 95       	reti
+ 398:	8f 91       	pop	r24
+ 39a:	0f 90       	pop	r0
+ 39c:	0f be       	out	0x3f, r0	; 63
+ 39e:	0f 90       	pop	r0
+ 3a0:	1f 90       	pop	r1
+ 3a2:	18 95       	reti
 
-000003c2 <main>:
+000003a4 <main>:
 
 int main(void)
 {
 	CLKPR = (1<<CLKPCE); CLKPR = (0<<CLKPS3) | (0<<CLKPS2) | (0<<CLKPS1) | (0<<CLKPS0); // Clock prescaler division factor: 1
- 3c2:	80 e8       	ldi	r24, 0x80	; 128
- 3c4:	86 bd       	out	0x26, r24	; 38
- 3c6:	16 bc       	out	0x26, r1	; 38
+ 3a4:	80 e8       	ldi	r24, 0x80	; 128
+ 3a6:	86 bd       	out	0x26, r24	; 38
+ 3a8:	16 bc       	out	0x26, r1	; 38
 	MCUCR = (1<<SE) | (0<<SM1) | (0<<SM0); // Idle sleep enable
- 3c8:	80 e2       	ldi	r24, 0x20	; 32
- 3ca:	85 bf       	out	0x35, r24	; 53
+ 3aa:	80 e2       	ldi	r24, 0x20	; 32
+ 3ac:	85 bf       	out	0x35, r24	; 53
 	KEY_INIT;
- 3cc:	87 e0       	ldi	r24, 0x07	; 7
- 3ce:	88 bb       	out	0x18, r24	; 24
+ 3ae:	87 e0       	ldi	r24, 0x07	; 7
+ 3b0:	88 bb       	out	0x18, r24	; 24
 	//DDRA = ; // Out
 	//PORTA = StopSwitch | (1<<PORTA5) | (1<<PORTA2) | (1<<PORTA1) | (1<<PORTA0); // pullup: Cnt1, Cnt2, LDR1, not used pins
 	//PORTB = ; // pullup
 	SETUP_WATCHDOG;
- 3d0:	88 e1       	ldi	r24, 0x18	; 24
- 3d2:	81 bd       	out	0x21, r24	; 33
- 3d4:	8e e4       	ldi	r24, 0x4E	; 78
- 3d6:	81 bd       	out	0x21, r24	; 33
+ 3b2:	88 e1       	ldi	r24, 0x18	; 24
+ 3b4:	81 bd       	out	0x21, r24	; 33
+ 3b6:	8e e4       	ldi	r24, 0x4E	; 78
+ 3b8:	81 bd       	out	0x21, r24	; 33
 	//GIMSK = (1<<PCIE1) | (1<<PCIE0); // Pin Change Interrupt Enable 0, 1
 	//PCMSK0 = (1<<PCINT4) | (1<<PCINT3); // Pin Change Mask Register 0 - reed switch, power sensor
 	//PCMSK1 = (1<<PCINT10) | (1<<PCINT9) | (1<<PCINT8); // Pin Change Mask Register 1 - Keys
 	uint8_t display_preiod = EEPROM_read(EPROM_DISPLAY_PERIOD);
- 3d8:	80 e0       	ldi	r24, 0x00	; 0
- 3da:	90 e0       	ldi	r25, 0x00	; 0
- 3dc:	c1 df       	rcall	.-126    	; 0x360 <EEPROM_read>
+ 3ba:	80 e0       	ldi	r24, 0x00	; 0
+ 3bc:	90 e0       	ldi	r25, 0x00	; 0
+ 3be:	c1 df       	rcall	.-126    	; 0x342 <EEPROM_read>
 	if(display_preiod == 0xFF) EEPROM_write(EPROM_DISPLAY_PERIOD, display_preiod = 3);
- 3de:	8f 3f       	cpi	r24, 0xFF	; 255
- 3e0:	21 f4       	brne	.+8      	; 0x3ea <main+0x28>
- 3e2:	63 e0       	ldi	r22, 0x03	; 3
- 3e4:	80 e0       	ldi	r24, 0x00	; 0
- 3e6:	90 e0       	ldi	r25, 0x00	; 0
- 3e8:	c2 df       	rcall	.-124    	; 0x36e <EEPROM_write>
+ 3c0:	8f 3f       	cpi	r24, 0xFF	; 255
+ 3c2:	21 f4       	brne	.+8      	; 0x3cc <main+0x28>
+ 3c4:	63 e0       	ldi	r22, 0x03	; 3
+ 3c6:	80 e0       	ldi	r24, 0x00	; 0
+ 3c8:	90 e0       	ldi	r25, 0x00	; 0
+ 3ca:	c2 df       	rcall	.-124    	; 0x350 <EEPROM_write>
 	//
 	OCR1A = F_CPU / (4 * 2 * 64); // 0.125 sec; = F_CPU / (FREQ * 2 * Prescaller); min = 61Hz;  FREQ = F_CPU / (2 * Prescaller * (1 + OCR1A)); 
- 3ea:	89 e0       	ldi	r24, 0x09	; 9
- 3ec:	9d e3       	ldi	r25, 0x3D	; 61
- 3ee:	9b bd       	out	0x2b, r25	; 43
- 3f0:	8a bd       	out	0x2a, r24	; 42
+ 3cc:	89 e0       	ldi	r24, 0x09	; 9
+ 3ce:	9d e3       	ldi	r25, 0x3D	; 61
+ 3d0:	9b bd       	out	0x2b, r25	; 43
+ 3d2:	8a bd       	out	0x2a, r24	; 42
 	TIMSK1 = (1<<OCIE1A); // overflow interrupt
- 3f2:	82 e0       	ldi	r24, 0x02	; 2
- 3f4:	8c b9       	out	0x0c, r24	; 12
+ 3d4:	82 e0       	ldi	r24, 0x02	; 2
+ 3d6:	8c b9       	out	0x0c, r24	; 12
 	//DDRA |= (1<<PORTA5); TCCR1A = (1<<COM1B0); // FREQ OUT OC1B
 	TCCR1B = (1<<WGM12) | (0 << CS12) | (1 << CS11) | (1 << CS10); // CTC mode, Timer0 prescaller: 64
- 3f6:	8b e0       	ldi	r24, 0x0B	; 11
- 3f8:	8e bd       	out	0x2e, r24	; 46
+ 3d8:	8b e0       	ldi	r24, 0x0B	; 11
+ 3da:	8e bd       	out	0x2e, r24	; 46
 	//
 	sei();
- 3fa:	78 94       	sei
+ 3dc:	78 94       	sei
 	if(KEY_RUS_PRESSING) {
- 3fc:	b1 99       	sbic	0x16, 1	; 22
- 3fe:	05 c0       	rjmp	.+10     	; 0x40a <main+0x48>
+ 3de:	b1 99       	sbic	0x16, 1	; 22
+ 3e0:	05 c0       	rjmp	.+10     	; 0x3ec <main+0x48>
 		LCDCH_Init(LCDCH_2LINES | LCDCH_RUS_FONT);
- 400:	8a e0       	ldi	r24, 0x0A	; 10
- 402:	36 df       	rcall	.-404    	; 0x270 <LCDCH_Init>
+ 3e2:	8a e0       	ldi	r24, 0x0A	; 10
+ 3e4:	45 df       	rcall	.-374    	; 0x270 <LCDCH_Init>
 		LCDCH_WriteStringPGM(PSTR("Rus 5x8"));
- 404:	8b e6       	ldi	r24, 0x6B	; 107
- 406:	90 e0       	ldi	r25, 0x00	; 0
- 408:	0b c0       	rjmp	.+22     	; 0x420 <main+0x5e>
+ 3e6:	8b e6       	ldi	r24, 0x6B	; 107
+ 3e8:	90 e0       	ldi	r25, 0x00	; 0
+ 3ea:	0b c0       	rjmp	.+22     	; 0x402 <main+0x5e>
 	} else if(KEY_SEC_PRESSING) {
- 40a:	b2 99       	sbic	0x16, 2	; 22
- 40c:	05 c0       	rjmp	.+10     	; 0x418 <main+0x56>
+ 3ec:	b2 99       	sbic	0x16, 2	; 22
+ 3ee:	05 c0       	rjmp	.+10     	; 0x3fa <main+0x56>
 		LCDCH_Init(LCDCH_2LINES | LCDCH_SECOND_FONT);
- 40e:	8c e0       	ldi	r24, 0x0C	; 12
- 410:	2f df       	rcall	.-418    	; 0x270 <LCDCH_Init>
+ 3f0:	8c e0       	ldi	r24, 0x0C	; 12
+ 3f2:	3e df       	rcall	.-388    	; 0x270 <LCDCH_Init>
 		LCDCH_WriteStringPGM(PSTR("Sec 5x10"));
- 412:	82 e6       	ldi	r24, 0x62	; 98
- 414:	90 e0       	ldi	r25, 0x00	; 0
- 416:	04 c0       	rjmp	.+8      	; 0x420 <main+0x5e>
+ 3f4:	82 e6       	ldi	r24, 0x62	; 98
+ 3f6:	90 e0       	ldi	r25, 0x00	; 0
+ 3f8:	04 c0       	rjmp	.+8      	; 0x402 <main+0x5e>
 	} else {
 		LCDCH_Init(LCDCH_2LINES); // | LCDCH_SECOND_FONT));
- 418:	88 e0       	ldi	r24, 0x08	; 8
- 41a:	2a df       	rcall	.-428    	; 0x270 <LCDCH_Init>
+ 3fa:	88 e0       	ldi	r24, 0x08	; 8
+ 3fc:	39 df       	rcall	.-398    	; 0x270 <LCDCH_Init>
 		LCDCH_WriteStringPGM(PSTR("Std 5x8"));
- 41c:	8a e5       	ldi	r24, 0x5A	; 90
- 41e:	90 e0       	ldi	r25, 0x00	; 0
- 420:	6e df       	rcall	.-292    	; 0x2fe <LCDCH_WriteStringPGM>
+ 3fe:	8a e5       	ldi	r24, 0x5A	; 90
+ 400:	90 e0       	ldi	r25, 0x00	; 0
+ 402:	7d df       	rcall	.-262    	; 0x2fe <LCDCH_WriteStringPGM>
 	}
 	uint8_t cols, rows;
 	if(KEY_2004_PRESSING) {
- 422:	b0 99       	sbic	0x16, 0	; 22
- 424:	07 c0       	rjmp	.+14     	; 0x434 <main+0x72>
+ 404:	b0 99       	sbic	0x16, 0	; 22
+ 406:	07 c0       	rjmp	.+14     	; 0x416 <main+0x72>
 		LCDCH_WriteStringPGM(PSTR(",LCD2004"));
- 426:	81 e5       	ldi	r24, 0x51	; 81
- 428:	90 e0       	ldi	r25, 0x00	; 0
- 42a:	69 df       	rcall	.-302    	; 0x2fe <LCDCH_WriteStringPGM>
+ 408:	81 e5       	ldi	r24, 0x51	; 81
+ 40a:	90 e0       	ldi	r25, 0x00	; 0
+ 40c:	78 df       	rcall	.-272    	; 0x2fe <LCDCH_WriteStringPGM>
 		cols = 16;
 		rows = 4;
- 42c:	44 e0       	ldi	r20, 0x04	; 4
- 42e:	f4 2e       	mov	r15, r20
+ 40e:	44 e0       	ldi	r20, 0x04	; 4
+ 410:	f4 2e       	mov	r15, r20
 		LCDCH_WriteStringPGM(PSTR("Std 5x8"));
 	}
 	uint8_t cols, rows;
 	if(KEY_2004_PRESSING) {
 		LCDCH_WriteStringPGM(PSTR(",LCD2004"));
 		cols = 16;
- 430:	10 e1       	ldi	r17, 0x10	; 16
- 432:	06 c0       	rjmp	.+12     	; 0x440 <main+0x7e>
+ 412:	10 e1       	ldi	r17, 0x10	; 16
+ 414:	06 c0       	rjmp	.+12     	; 0x422 <main+0x7e>
 		rows = 4;
 	} else {
 		LCDCH_WriteStringPGM(PSTR(",LCD1602"));
- 434:	88 e4       	ldi	r24, 0x48	; 72
- 436:	90 e0       	ldi	r25, 0x00	; 0
- 438:	62 df       	rcall	.-316    	; 0x2fe <LCDCH_WriteStringPGM>
+ 416:	88 e4       	ldi	r24, 0x48	; 72
+ 418:	90 e0       	ldi	r25, 0x00	; 0
+ 41a:	71 df       	rcall	.-286    	; 0x2fe <LCDCH_WriteStringPGM>
 		cols = 12;
 		rows = 2;
- 43a:	32 e0       	ldi	r19, 0x02	; 2
- 43c:	f3 2e       	mov	r15, r19
+ 41c:	32 e0       	ldi	r19, 0x02	; 2
+ 41e:	f3 2e       	mov	r15, r19
 		LCDCH_WriteStringPGM(PSTR(",LCD2004"));
 		cols = 16;
 		rows = 4;
 	} else {
 		LCDCH_WriteStringPGM(PSTR(",LCD1602"));
 		cols = 12;
- 43e:	1c e0       	ldi	r17, 0x0C	; 12
+ 420:	1c e0       	ldi	r17, 0x0C	; 12
 }
 
 void LCDCH_SetCursor(const uint8_t row, const uint8_t col)  // y = 1..4, x = 1..20
 {
 	//static int row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
 	LCDCH_WaitWhileBusy();
- 440:	ce de       	rcall	.-612    	; 0x1de <LCDCH_WaitWhileBusy>
+ 422:	dd de       	rcall	.-582    	; 0x1de <LCDCH_WaitWhileBusy>
 	LCDCH_WriteCommand(LCDCH__SetCursorPos | ((row > 2 ? 0x14 : 0) + ((row-1) & 0x01) * 0x40 + col-1));
- 442:	80 ec       	ldi	r24, 0xC0	; 192
- 444:	e0 de       	rcall	.-576    	; 0x206 <LCDCH_WriteCommand>
+ 424:	80 ec       	ldi	r24, 0xC0	; 192
+ 426:	ef de       	rcall	.-546    	; 0x206 <LCDCH_WriteCommand>
 		rows = 2;
 	}
 	LCDCH_SetCursor(2, 1);
 	if(cols >= 16) LCDCH_WriteStringPGM(PSTR("p2-2004,p3-RU,p4-SEC")); 
- 446:	10 31       	cpi	r17, 0x10	; 16
- 448:	19 f4       	brne	.+6      	; 0x450 <main+0x8e>
- 44a:	83 e3       	ldi	r24, 0x33	; 51
- 44c:	90 e0       	ldi	r25, 0x00	; 0
- 44e:	02 c0       	rjmp	.+4      	; 0x454 <main+0x92>
+ 428:	10 31       	cpi	r17, 0x10	; 16
+ 42a:	19 f4       	brne	.+6      	; 0x432 <main+0x8e>
+ 42c:	83 e3       	ldi	r24, 0x33	; 51
+ 42e:	90 e0       	ldi	r25, 0x00	; 0
+ 430:	02 c0       	rjmp	.+4      	; 0x436 <main+0x92>
 	else LCDCH_WriteStringPGM(PSTR("p2-2004,3-RU,4-S")); 
- 450:	82 e2       	ldi	r24, 0x22	; 34
- 452:	90 e0       	ldi	r25, 0x00	; 0
- 454:	54 df       	rcall	.-344    	; 0x2fe <LCDCH_WriteStringPGM>
+ 432:	82 e2       	ldi	r24, 0x22	; 34
+ 434:	90 e0       	ldi	r25, 0x00	; 0
+ 436:	63 df       	rcall	.-314    	; 0x2fe <LCDCH_WriteStringPGM>
 	//Delay100ms(15);
 	uint8_t c = 0;
 	uint8_t loop1 = 0;
 	Timer = 5;
- 456:	85 e0       	ldi	r24, 0x05	; 5
- 458:	80 93 63 00 	sts	0x0063, r24
+ 438:	85 e0       	ldi	r24, 0x05	; 5
+ 43a:	80 93 63 00 	sts	0x0063, r24
 	LCDCH_SetCursor(2, 1);
 	if(cols >= 16) LCDCH_WriteStringPGM(PSTR("p2-2004,p3-RU,p4-SEC")); 
 	else LCDCH_WriteStringPGM(PSTR("p2-2004,3-RU,4-S")); 
 	//Delay100ms(15);
 	uint8_t c = 0;
 	uint8_t loop1 = 0;
- 45c:	e1 2c       	mov	r14, r1
+ 43e:	e1 2c       	mov	r14, r1
 	}
 	LCDCH_SetCursor(2, 1);
 	if(cols >= 16) LCDCH_WriteStringPGM(PSTR("p2-2004,p3-RU,p4-SEC")); 
 	else LCDCH_WriteStringPGM(PSTR("p2-2004,3-RU,4-S")); 
 	//Delay100ms(15);
 	uint8_t c = 0;
- 45e:	c0 e0       	ldi	r28, 0x00	; 0
+ 440:	c0 e0       	ldi	r28, 0x00	; 0
 	uint8_t loop1 = 0;
 	Timer = 5;
 	
     while(1)
     {	__asm__ volatile ("" ::: "memory"); // Need memory barrier
 	    sleep_cpu();
- 460:	88 95       	sleep
+ 442:	88 95       	sleep
 		wdt_reset();
- 462:	a8 95       	wdr
+ 444:	a8 95       	wdr
 		if(Timer == 0) {
- 464:	80 91 63 00 	lds	r24, 0x0063
- 468:	81 11       	cpse	r24, r1
- 46a:	fa cf       	rjmp	.-12     	; 0x460 <main+0x9e>
+ 446:	80 91 63 00 	lds	r24, 0x0063
+ 44a:	81 11       	cpse	r24, r1
+ 44c:	fa cf       	rjmp	.-12     	; 0x442 <main+0x9e>
+			if(KEY_RUS_PRESSING && loop1) continue;
+ 44e:	b1 99       	sbic	0x16, 1	; 22
+ 450:	02 c0       	rjmp	.+4      	; 0x456 <main+0xb2>
+ 452:	e1 10       	cpse	r14, r1
+ 454:	f6 cf       	rjmp	.-20     	; 0x442 <main+0x9e>
 			LCDCH_ClearDisplay();
- 46c:	fb de       	rcall	.-522    	; 0x264 <LCDCH_ClearDisplay>
+ 456:	06 df       	rcall	.-500    	; 0x264 <LCDCH_ClearDisplay>
 			for(uint8_t i = 1; i <= rows; i++) {
- 46e:	d1 e0       	ldi	r29, 0x01	; 1
+ 458:	d1 e0       	ldi	r29, 0x01	; 1
 				LCDCH_SetCursor(i, 1);
- 470:	61 e0       	ldi	r22, 0x01	; 1
- 472:	8d 2f       	mov	r24, r29
- 474:	d7 de       	rcall	.-594    	; 0x224 <LCDCH_SetCursor>
+ 45a:	61 e0       	ldi	r22, 0x01	; 1
+ 45c:	8d 2f       	mov	r24, r29
+ 45e:	e2 de       	rcall	.-572    	; 0x224 <LCDCH_SetCursor>
 				FormatNumberHEX(c);
- 476:	8c 2f       	mov	r24, r28
- 478:	50 df       	rcall	.-352    	; 0x31a <FormatNumberHEX>
+ 460:	8c 2f       	mov	r24, r28
+ 462:	5b df       	rcall	.-330    	; 0x31a <FormatNumberHEX>
 				LCDCH_WriteString(buffer);
- 47a:	85 e6       	ldi	r24, 0x65	; 101
- 47c:	90 e0       	ldi	r25, 0x00	; 0
- 47e:	34 df       	rcall	.-408    	; 0x2e8 <LCDCH_WriteString>
+ 464:	85 e6       	ldi	r24, 0x65	; 101
+ 466:	90 e0       	ldi	r25, 0x00	; 0
+ 468:	3f df       	rcall	.-386    	; 0x2e8 <LCDCH_WriteString>
 				LCDCH_WriteByte(':');
- 480:	8a e3       	ldi	r24, 0x3A	; 58
- 482:	b2 de       	rcall	.-668    	; 0x1e8 <LCDCH_WriteByte>
+ 46a:	8a e3       	ldi	r24, 0x3A	; 58
+ 46c:	bd de       	rcall	.-646    	; 0x1e8 <LCDCH_WriteByte>
 				LCDCH_WriteByte(' ');
- 484:	80 e2       	ldi	r24, 0x20	; 32
- 486:	b0 de       	rcall	.-672    	; 0x1e8 <LCDCH_WriteByte>
- 488:	8c 2f       	mov	r24, r28
+ 46e:	80 e2       	ldi	r24, 0x20	; 32
+ 470:	bb de       	rcall	.-650    	; 0x1e8 <LCDCH_WriteByte>
+ 472:	8c 2f       	mov	r24, r28
 				for(uint8_t j = 1; j <= cols; j++) {
- 48a:	01 e0       	ldi	r16, 0x01	; 1
+ 474:	01 e0       	ldi	r16, 0x01	; 1
 					LCDCH_WriteByte(c++);
- 48c:	cf 5f       	subi	r28, 0xFF	; 255
- 48e:	ac de       	rcall	.-680    	; 0x1e8 <LCDCH_WriteByte>
+ 476:	cf 5f       	subi	r28, 0xFF	; 255
+ 478:	b7 de       	rcall	.-658    	; 0x1e8 <LCDCH_WriteByte>
 					if(c == 0) {
- 490:	cc 23       	and	r28, r28
- 492:	29 f0       	breq	.+10     	; 0x49e <main+0xdc>
+ 47a:	cc 23       	and	r28, r28
+ 47c:	29 f0       	breq	.+10     	; 0x488 <main+0xe4>
 				LCDCH_SetCursor(i, 1);
 				FormatNumberHEX(c);
 				LCDCH_WriteString(buffer);
 				LCDCH_WriteByte(':');
 				LCDCH_WriteByte(' ');
 				for(uint8_t j = 1; j <= cols; j++) {
- 494:	0f 5f       	subi	r16, 0xFF	; 255
- 496:	10 17       	cp	r17, r16
- 498:	20 f0       	brcs	.+8      	; 0x4a2 <main+0xe0>
- 49a:	8c 2f       	mov	r24, r28
- 49c:	f7 cf       	rjmp	.-18     	; 0x48c <main+0xca>
+ 47e:	0f 5f       	subi	r16, 0xFF	; 255
+ 480:	10 17       	cp	r17, r16
+ 482:	20 f0       	brcs	.+8      	; 0x48c <main+0xe8>
+ 484:	8c 2f       	mov	r24, r28
+ 486:	f7 cf       	rjmp	.-18     	; 0x476 <main+0xd2>
 					LCDCH_WriteByte(c++);
 					if(c == 0) {
 						loop1 = 1;
- 49e:	ee 24       	eor	r14, r14
- 4a0:	e3 94       	inc	r14
-    {	__asm__ volatile ("" ::: "memory"); // Need memory barrier
+ 488:	ee 24       	eor	r14, r14
+ 48a:	e3 94       	inc	r14
 	    sleep_cpu();
 		wdt_reset();
 		if(Timer == 0) {
+			if(KEY_RUS_PRESSING && loop1) continue;
 			LCDCH_ClearDisplay();
 			for(uint8_t i = 1; i <= rows; i++) {
- 4a2:	df 5f       	subi	r29, 0xFF	; 255
- 4a4:	fd 16       	cp	r15, r29
- 4a6:	20 f7       	brcc	.-56     	; 0x470 <main+0xae>
+ 48c:	df 5f       	subi	r29, 0xFF	; 255
+ 48e:	fd 16       	cp	r15, r29
+ 490:	20 f7       	brcc	.-56     	; 0x45a <main+0xb6>
 						loop1 = 1;
 						break;
 					}
 				}
 			}
-			if(loop1) {
- 4a8:	ee 20       	and	r14, r14
- 4aa:	69 f0       	breq	.+26     	; 0x4c6 <main+0x104>
-				uint8_t pressed = KEY_RUS_PRESSING;
- 4ac:	86 b3       	in	r24, 0x16	; 22
- 4ae:	82 70       	andi	r24, 0x02	; 2
-				while(KEY_RUS_PRESSING) {
- 4b0:	b1 99       	sbic	0x16, 1	; 22
- 4b2:	03 c0       	rjmp	.+6      	; 0x4ba <main+0xf8>
-				    sleep_cpu();
- 4b4:	88 95       	sleep
-				    wdt_reset();
- 4b6:	a8 95       	wdr
- 4b8:	fb cf       	rjmp	.-10     	; 0x4b0 <main+0xee>
-				}
-				if(pressed) Delay100ms(3); else Timer = EEPROM_read(EPROM_DISPLAY_PERIOD);
- 4ba:	81 11       	cpse	r24, r1
- 4bc:	04 c0       	rjmp	.+8      	; 0x4c6 <main+0x104>
- 4be:	83 e0       	ldi	r24, 0x03	; 3
- 4c0:	90 e0       	ldi	r25, 0x00	; 0
- 4c2:	3f df       	rcall	.-386    	; 0x342 <Delay100ms>
- 4c4:	cd cf       	rjmp	.-102    	; 0x460 <main+0x9e>
-			} else Timer = EEPROM_read(EPROM_DISPLAY_PERIOD);
- 4c6:	80 e0       	ldi	r24, 0x00	; 0
- 4c8:	90 e0       	ldi	r25, 0x00	; 0
- 4ca:	4a df       	rcall	.-364    	; 0x360 <EEPROM_read>
- 4cc:	80 93 63 00 	sts	0x0063, r24
- 4d0:	c7 cf       	rjmp	.-114    	; 0x460 <main+0x9e>
+			Timer = EEPROM_read(EPROM_DISPLAY_PERIOD);
+ 492:	80 e0       	ldi	r24, 0x00	; 0
+ 494:	90 e0       	ldi	r25, 0x00	; 0
+ 496:	55 df       	rcall	.-342    	; 0x342 <EEPROM_read>
+ 498:	80 93 63 00 	sts	0x0063, r24
+ 49c:	d2 cf       	rjmp	.-92     	; 0x442 <main+0x9e>
 
-000004d2 <_exit>:
- 4d2:	f8 94       	cli
+0000049e <_exit>:
+ 49e:	f8 94       	cli
 
-000004d4 <__stop_program>:
- 4d4:	ff cf       	rjmp	.-2      	; 0x4d4 <__stop_program>
+000004a0 <__stop_program>:
+ 4a0:	ff cf       	rjmp	.-2      	; 0x4a0 <__stop_program>

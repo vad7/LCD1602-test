@@ -6,7 +6,7 @@
  *
  * ATtiny44A
  */ 
-// Fuses: BODLEVEL = 1V8
+// Fuses: BODLEVEL = 1V8, RSTDISBL
 #define F_CPU	8000000UL
 
 #include <stdlib.h>
@@ -137,6 +137,7 @@ int main(void)
 	    sleep_cpu();
 		wdt_reset();
 		if(Timer == 0) {
+			if(KEY_RUS_PRESSING && loop1) continue;
 			LCDCH_ClearDisplay();
 			for(uint8_t i = 1; i <= rows; i++) {
 				LCDCH_SetCursor(i, 1);
@@ -152,14 +153,7 @@ int main(void)
 					}
 				}
 			}
-			if(loop1) {
-				uint8_t pressed = KEY_RUS_PRESSING;
-				while(KEY_RUS_PRESSING) {
-				    sleep_cpu();
-				    wdt_reset();
-				}
-				if(pressed) Delay100ms(3); else Timer = EEPROM_read(EPROM_DISPLAY_PERIOD);
-			} else Timer = EEPROM_read(EPROM_DISPLAY_PERIOD);
+			Timer = EEPROM_read(EPROM_DISPLAY_PERIOD);
 		}
 	}
 }
